@@ -1,4 +1,4 @@
-package com.example.t4td0.model;
+package com.example.JavaDocker.model;
 
 public class Tarefa {
     private String titulo;

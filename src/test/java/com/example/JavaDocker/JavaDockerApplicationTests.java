@@ -1,10 +1,10 @@
-package com.example.t4td0;
+package com.example.JavaDocker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class T4td0ApplicationTests {
+class JavaDockerApplicationTests {
 
 	@Test
 	void contextLoads() {

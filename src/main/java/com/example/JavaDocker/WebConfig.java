@@ -1,4 +1,4 @@
-package com.example.t4td0;
+package com.example.JavaDocker;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

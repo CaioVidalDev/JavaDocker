@@ -1,4 +1,4 @@
-package com.example.t4td0;
+package com.example.JavaDocker;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ClassPathResource;

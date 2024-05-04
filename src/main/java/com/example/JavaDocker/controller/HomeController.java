@@ -1,6 +1,6 @@
-package com.example.t4td0.controller;
+package com.example.JavaDocker.controller;
 
-import com.example.t4td0.model.Tarefa;
+import com.example.JavaDocker.model.Tarefa;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
