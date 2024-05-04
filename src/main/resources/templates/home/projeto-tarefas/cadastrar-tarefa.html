@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Tarefa</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastrar Tarefa</h1>
+        <form action="/cadastrar-tarefa" method="post">
+            <label for="titulo-cadastro">Título da Tarefa:</label>
+            <input type="text" id="titulo-cadastro" name="titulo" required>
+            <button type="submit">Salvar</button>
+        </form>
+        <a href="/" class="btn-voltar">Voltar</a>
+    </div>
+</body>
+</html>
