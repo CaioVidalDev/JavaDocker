@@ -1,3 +1,8 @@
+
+
+
+
+
 FROM openjdk:21
 COPY . /app
 WORKDIR /app
