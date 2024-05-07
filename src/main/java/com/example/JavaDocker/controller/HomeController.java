@@ -26,7 +26,9 @@ public class HomeController {
     @PostMapping("/cadastrar-tarefa")
     public String cadastrarTarefa(@RequestParam("titulo") String titulo) {
         if (!titulo.trim().isEmpty()) {
-            tarefas.add(new Tarefa(titulo));
+            Tarefa novaTarefa = new Tarefa(titulo);
+            tarefas.add(novaTarefa);
+            novaTarefa.iniciarProcessamento();
         }
         return "redirect:/";
     }
@@ -79,4 +81,3 @@ public class HomeController {
         }
     }
 }
-
