@@ -1,20 +1,21 @@
 package com.example.JavaDocker.model;
 
 import com.example.JavaDocker.TarefaThread;
+import java.util.concurrent.ExecutorService;
 
 public class Tarefa {
     private String titulo;
     private boolean concluida;
     private TarefaThread thread;
-    private final Object lock = new Object(); 
-    
+    private final Object lock = new Object(); // Objeto de trava para sincronização
+
     public Tarefa(String titulo) {
         this.titulo = titulo;
         this.concluida = false;
     }
 
     public void concluir() {
-        synchronized (lock) { 
+        synchronized (lock) { // Bloco sincronizado para garantir operação atômica
             if (!concluida) {
                 concluida = true;
                 System.out.println("Tarefa '" + titulo + "' concluída.");
@@ -24,9 +25,9 @@ public class Tarefa {
         }
     }
 
-    public void iniciarProcessamento() {
+    public void iniciarProcessamento(ExecutorService executor) {
         this.thread = new TarefaThread(this);
-        thread.start();
+        executor.execute(thread); // Executa a tarefa no pool de threads
     }
 
     public String getTitulo() {
@@ -38,7 +39,7 @@ public class Tarefa {
     }
 
     public void setTitulo(String novoTitulo) {
-        synchronized (lock) { 
+        synchronized (lock) { // Bloco sincronizado para garantir operação atômica
             this.titulo = novoTitulo;
         }
     }

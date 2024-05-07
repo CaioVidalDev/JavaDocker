@@ -6,12 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Controller
 public class HomeController {
     private List<Tarefa> tarefas = new ArrayList<>();
     private int tarefaIndexToEdit;
     private final Object lock = new Object(); // Objeto de trava para sincronização
+    private ExecutorService executor = Executors.newCachedThreadPool(); // Pool de threads para executar tarefas
 
     @GetMapping("/")
     public String index(Model model) {
@@ -31,7 +34,7 @@ public class HomeController {
             synchronized (lock) { // Bloco sincronizado para garantir operação atômica
                 tarefas.add(novaTarefa);
             }
-            novaTarefa.iniciarProcessamento();
+            novaTarefa.iniciarProcessamento(executor); // Inicia a execução da tarefa no pool de threads
         }
         return "redirect:/";
     }
@@ -88,5 +91,3 @@ public class HomeController {
         }
     }
 }
-
-
