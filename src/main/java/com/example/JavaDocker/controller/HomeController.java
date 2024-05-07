@@ -11,6 +11,7 @@ import java.util.List;
 public class HomeController {
     private List<Tarefa> tarefas = new ArrayList<>();
     private int tarefaIndexToEdit;
+    private final Object lock = new Object(); // Objeto de trava para sincronização
 
     @GetMapping("/")
     public String index(Model model) {
@@ -27,7 +28,9 @@ public class HomeController {
     public String cadastrarTarefa(@RequestParam("titulo") String titulo) {
         if (!titulo.trim().isEmpty()) {
             Tarefa novaTarefa = new Tarefa(titulo);
-            tarefas.add(novaTarefa);
+            synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+                tarefas.add(novaTarefa);
+            }
             novaTarefa.iniciarProcessamento();
         }
         return "redirect:/";
@@ -47,7 +50,9 @@ public class HomeController {
     @PostMapping("/editar-tarefa")
     public String editarTarefa(@RequestParam("titulo") String novoTitulo, Model model) {
         if (tarefaIndexToEdit >= 0 && tarefaIndexToEdit < tarefas.size() && !novoTitulo.trim().isEmpty()) {
-            tarefas.get(tarefaIndexToEdit).setTitulo(novoTitulo);
+            synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+                tarefas.get(tarefaIndexToEdit).setTitulo(novoTitulo);
+            }
         }
         return "redirect:/";
     }
@@ -66,7 +71,9 @@ public class HomeController {
     @PostMapping("/excluir-tarefa")
     public String excluirTarefa() {
         if (tarefaIndexToEdit >= 0 && tarefaIndexToEdit < tarefas.size()) {
-            tarefas.remove(tarefaIndexToEdit);
+            synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+                tarefas.remove(tarefaIndexToEdit);
+            }
         }
         return "redirect:/";
     }
@@ -81,3 +88,5 @@ public class HomeController {
         }
     }
 }
+
+
