@@ -13,8 +13,8 @@ import java.util.concurrent.Executors;
 public class HomeController {
     private List<Tarefa> tarefas = new ArrayList<>();
     private int tarefaIndexToEdit;
-    private final Object lock = new Object(); // Objeto de trava para sincronização
-    private ExecutorService executor = Executors.newCachedThreadPool(); // Pool de threads para executar tarefas
+    private final Object lock = new Object();
+    private ExecutorService executor = Executors.newCachedThreadPool();
 
     @GetMapping("/")
     public String index(Model model) {
@@ -31,10 +31,10 @@ public class HomeController {
     public String cadastrarTarefa(@RequestParam("titulo") String titulo) {
         if (!titulo.trim().isEmpty()) {
             Tarefa novaTarefa = new Tarefa(titulo);
-            synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+            synchronized (lock) {
                 tarefas.add(novaTarefa);
             }
-            novaTarefa.iniciarProcessamento(executor); // Inicia a execução da tarefa no pool de threads
+            novaTarefa.iniciarProcessamento(executor);
         }
         return "redirect:/";
     }
@@ -53,9 +53,10 @@ public class HomeController {
     @PostMapping("/editar-tarefa")
     public String editarTarefa(@RequestParam("titulo") String novoTitulo, Model model) {
         if (tarefaIndexToEdit >= 0 && tarefaIndexToEdit < tarefas.size() && !novoTitulo.trim().isEmpty()) {
-            synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+            synchronized (lock) {
                 tarefas.get(tarefaIndexToEdit).setTitulo(novoTitulo);
             }
+            System.out.println("Título da tarefa '" + novoTitulo + "' atualizado.");
         }
         return "redirect:/";
     }
@@ -74,8 +75,10 @@ public class HomeController {
     @PostMapping("/excluir-tarefa")
     public String excluirTarefa() {
         if (tarefaIndexToEdit >= 0 && tarefaIndexToEdit < tarefas.size()) {
-            synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+            synchronized (lock) {
+                String tituloExcluido = tarefas.get(tarefaIndexToEdit).getTitulo();
                 tarefas.remove(tarefaIndexToEdit);
+                System.out.println("Tarefa '" + tituloExcluido + "' excluída.");
             }
         }
         return "redirect:/";
@@ -84,10 +87,19 @@ public class HomeController {
     @GetMapping("/visualizar-tarefa/{index}")
     public String preencherFormularioVisualizacao(@PathVariable("index") int index, Model model) {
         if (index >= 0 && index < tarefas.size()) {
-            model.addAttribute("titulo", tarefas.get(index).getTitulo());
+            String tituloVisualizado = tarefas.get(index).getTitulo();
+            model.addAttribute("titulo", tituloVisualizado);
+            System.out.println("Visualizando tarefa: " + tituloVisualizado);
             return "home/projeto-tarefas/visualizar-tarefa";
         } else {
             return "redirect:/";
         }
     }
+
+    @GetMapping("/atualizar-lista-tarefas")
+    public String atualizarListaTarefas(Model model) {
+        System.out.println("Atualizando lista de tarefas.");
+        return "redirect:/";
+    }
 }
+

@@ -7,7 +7,7 @@ public class Tarefa {
     private String titulo;
     private boolean concluida;
     private TarefaThread thread;
-    private final Object lock = new Object(); // Objeto de trava para sincronização
+    private final Object lock = new Object();
 
     public Tarefa(String titulo) {
         this.titulo = titulo;
@@ -15,7 +15,7 @@ public class Tarefa {
     }
 
     public void concluir() {
-        synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+        synchronized (lock) {
             if (!concluida) {
                 concluida = true;
                 System.out.println("Tarefa '" + titulo + "' concluída.");
@@ -27,7 +27,7 @@ public class Tarefa {
 
     public void iniciarProcessamento(ExecutorService executor) {
         this.thread = new TarefaThread(this);
-        executor.execute(thread); // Executa a tarefa no pool de threads
+        executor.execute(thread);
     }
 
     public String getTitulo() {
@@ -39,10 +39,27 @@ public class Tarefa {
     }
 
     public void setTitulo(String novoTitulo) {
-        synchronized (lock) { // Bloco sincronizado para garantir operação atômica
+        synchronized (lock) {
+            System.out.println("Título da tarefa '" + titulo + "' atualizado para '" + novoTitulo + "'.");
             this.titulo = novoTitulo;
         }
     }
+
+    public void excluir() {
+        synchronized (lock) {
+            System.out.println("Tarefa '" + titulo + "' excluída.");
+        }
+    }
+
+    public void visualizar() {
+        synchronized (lock) {
+            System.out.println("Visualizando tarefa: '" + titulo + "'.");
+        }
+    }
+
+    public void listarAtualizado() {
+        synchronized (lock) {
+            System.out.println("Lista de tarefas atualizada.");
+        }
+    }
 }
-
-
